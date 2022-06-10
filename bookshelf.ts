@@ -1,12 +1,7 @@
-import knex from "knex";
-import bookshelf from "bookshelf";
-// import knexConfig from './knexfile.';
+const config = require("./knexfile").development;
 
-const config = require("./knexfile.ts").development;
-
-export const knexObj = knex(config);
-
-export const bs = bookshelf(knexObj);
+export const knexObj = require("knex")(config);
+export const bs = require("bookshelf")(knexObj);
 
 export const User = bs.model("User", {
   tableName: "users",

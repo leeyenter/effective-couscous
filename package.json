@@ -4,7 +4,11 @@
   "description": "",
   "main": "app.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node dist/app.js",
+    "postinstall": "tsc",
+    "watch-node": "nodemon dist/app.js",
+    "watch-ts": "tsc -w",
+    "deploy": "git push heroku master"
   },
   "author": "",
   "license": "ISC",
@@ -26,5 +30,8 @@
     "knex": "^0.21.21",
     "mysql2": "^2.3.3",
     "pg": "^8.7.3"
+  },
+  "engines": {
+    "node": "16.14.0"
   }
 }
