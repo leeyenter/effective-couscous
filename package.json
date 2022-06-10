@@ -5,10 +5,10 @@
   "main": "app.ts",
   "scripts": {
     "start": "node dist/app.js",
-    "postinstall": "tsc",
+    "postinstall": "tsc && mv public dist/",
     "watch-node": "nodemon dist/app.js",
     "watch-ts": "tsc -w",
-    "deploy": "git push heroku master"
+    "deploy": "git push heroku main"
   },
   "author": "",
   "license": "ISC",

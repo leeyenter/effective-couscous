@@ -1,10 +1,11 @@
 import express from "express";
+import path from "path";
 import { buildApiRouter } from "./routes/api";
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use("/", express.static("public"));
+app.use("/", express.static(path.join(__dirname, "public")));
 app.use("/api", buildApiRouter());
 
 app.listen(port, () => {
