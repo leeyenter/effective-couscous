@@ -1,4 +1,4 @@
-const config = require("./knexfile").development;
+const config = require("./knexfile")[process.env.NODE_ENV];
 
 export const knexObj = require("knex")(config);
 export const bs = require("bookshelf")(knexObj);
