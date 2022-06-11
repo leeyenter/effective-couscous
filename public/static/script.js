@@ -3,13 +3,11 @@ var userId = 1;
 function fetch(method, url, callback, body) {
   var req = new XMLHttpRequest();
   req.addEventListener("load", function () {
-    console.log(this.status);
     if (this.readyState != 4) {
       alert("Not ready");
       return;
     } else if (this.status >= 300) {
       alert("Error making HTTP request");
-      console.log(this.responseText);
       return;
     } else {
       let arg = "";
@@ -23,7 +21,6 @@ function fetch(method, url, callback, body) {
   if (body == null) {
     req.send();
   } else {
-    console.log(JSON.stringify(body));
     req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     req.send(JSON.stringify(body));
   }
@@ -36,13 +33,13 @@ function fetchUsers() {
     }
 
     setUser(obj[0].id);
-    fetchComments();
   });
 }
 
 function setUser(id) {
-  userId = id;
-  document.getElementById("profile-pic").src = users[id].pic;
+  userId = parseInt(id);
+  document.getElementById("profile-pic").src = users[userId].pic;
+  fetchComments(); // to refresh the upvotes
 }
 
 function makeElement(item) {
@@ -61,7 +58,6 @@ function makeElement(item) {
             <div class='comment-btns'>`;
 
   var upvotes = upvotes.map((x) => x.user);
-  console.log(upvotes, userId);
 
   if (upvotes.includes(userId)) {
     // Allow user to remove upvote
@@ -81,6 +77,7 @@ function makeElement(item) {
 }
 
 function fetchComments() {
+  console.log(userId);
   fetch("GET", "comments", function (obj) {
     var elem = document.getElementById("comments");
     elem.innerHTML = "";
