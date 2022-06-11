@@ -1,4 +1,4 @@
-const config = require("./knexfile")[process.env.NODE_ENV];
+const config = require("./knexfile")[process.env.NODE_ENV || "development"];
 
 export const knexObj = require("knex")(config);
 export const bs = require("bookshelf")(knexObj);
@@ -17,6 +17,6 @@ export const Comment = bs.model("Comment", {
     return this.belongsTo("User");
   },
   upvotes() {
-    return this.hasMany("Upvote");
+    return this.hasMany("Upvote", "comment");
   },
 });

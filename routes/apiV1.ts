@@ -32,7 +32,8 @@ commentsRouter
     try {
       const comments = await new Comment()
         .orderBy("created", "DESC")
-        .fetchAll();
+        .fetchAll({ withRelated: ["upvotes"] });
+
       res.status(200).json(
         comments.map((c) => {
           c.attributes["createdPretty"] = formatDistanceToNowStrict(
@@ -43,6 +44,7 @@ commentsRouter
         })
       );
     } catch (e) {
+      console.log(e);
       res.status(500).send();
     }
   })
@@ -69,17 +71,23 @@ upvoteRouter
     // Resolve to using Knex directly because Bookshelf doesn't seem to support ignoring conflicts
     knexObj("upvotes")
       .insert({ user: res.locals.userId, comment: req.params.id })
-      .onConflict("user")
+      .onConflict(["user", "comment"])
       .ignore()
       .then(() => res.status(201).send())
-      .catch(() => res.status(500).send());
+      .catch((e) => {
+        console.log(e);
+        res.status(500).send();
+      });
   })
   .delete((req, res) => {
     knexObj("upvotes")
       .where({ user: res.locals.userId, comment: req.params.id })
       .delete()
       .then(() => res.status(200).send())
-      .catch(() => res.status(500).send());
+      .catch((e) => {
+        console.log(e);
+        res.status(500).send();
+      });
   });
 
 export const v1Router = express.Router();

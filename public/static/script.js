@@ -46,10 +46,10 @@ function setUser(id) {
 }
 
 function makeElement(item) {
-  var { id, comment, createdPretty, user } = item;
+  var { id, comment, createdPretty, user, upvotes } = item;
   var { name, pic } = users[user];
   var element = document.createElement("div");
-  element.innerHTML = `
+  html = `
     <div class='comment'>
         <img src='${pic}'>
         <div class='comment-content'>
@@ -58,12 +58,25 @@ function makeElement(item) {
                 <span class='comment-date'> ・ ${createdPretty}</span>
             </div>
             <div class='comment-text'>${comment}</div>
-            <div class='comment-btns'>
-                <button>▲ Upvote</button>
-                <button>Reply</button>
-            </div>
+            <div class='comment-btns'>`;
+
+  var upvotes = upvotes.map((x) => x.user);
+  console.log(upvotes, userId);
+
+  if (upvotes.includes(userId)) {
+    // Allow user to remove upvote
+    html += `<button onclick="fetch('DELETE', '/upvote/${id}', fetchComments)">Upvoted!</button>`;
+  } else {
+    // Allow user to add upvote
+    html += `<button onclick="fetch('PUT', '/upvote/${id}', fetchComments)">▲ Upvote</button>`;
+  }
+
+  html += `          </div>
         </div>
     </div>`;
+
+  element.innerHTML = html;
+
   return element;
 }
 
