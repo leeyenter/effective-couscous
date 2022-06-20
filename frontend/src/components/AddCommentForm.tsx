@@ -10,7 +10,7 @@ export const AddCommentForm = () => {
     e.preventDefault();
     API.submitComment(ctx.user.id, comment).then(() => {
       setComment("");
-      ctx.fetchComments();
+      // ctx.fetchComments();
     });
   };
 

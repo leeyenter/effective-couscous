@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "/api/v1";
+const API_URL = "/api/v2";
 
 const buildHeaders = (userId: number) => {
   return { headers: { Authorization: `Bearer ${userId}` } };
