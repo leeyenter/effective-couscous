@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { API } from "./API";
+import { useCallback, useEffect, useState } from "react";
+import { API, API_URL } from "./API";
 import "./App.scss";
 import { MainContainer } from "./components/MainContainer";
 import {
@@ -10,7 +10,7 @@ import {
 } from "./Context";
 
 const App = () => {
-  const [users, setUsers] = useState<UserInterface[]>([defaultUser]);
+  const [users, setUsers] = useState<UserInterface[]>([]);
   const [comments, setComments] = useState<CommentInterface[]>([]);
   const [userId, setUserId] = useState(0);
   const [user, setUser] = useState(defaultUser);
@@ -24,19 +24,20 @@ const App = () => {
   };
 
   useEffect(() => {
-    setUser(users[userId]);
+    if (userId < users.length) setUser(users[userId]);
   }, [userId, users]);
 
-  const fetchComments = () => {
-    API.fetchComments(user.id).then((data) => setComments(data));
-  };
+  const fetchComments = useCallback(() => {
+    if (user.id > 0)
+      API.fetchComments(user.id).then((data) => setComments(data));
+  }, [user]);
 
   const addUpvote = (commentId: number) => {
-    API.addUpvote(user.id, commentId); //.then(fetchComments);
+    if (user.id > 0) API.addUpvote(user.id, commentId);
   };
 
   const removeUpvote = (commentId: number) => {
-    API.removeUpvote(user.id, commentId); //.then(fetchComments);
+    if (user.id > 0) API.removeUpvote(user.id, commentId);
   };
 
   const commentListener = (data: MessageEvent) => {
@@ -78,19 +79,20 @@ const App = () => {
 
   useEffect(() => {
     API.fetchUsers().then((data) => {
+      console.log("users", data);
       setUsers(data);
-      setUserId(data[0].id);
     });
 
-    const sse = new EventSource("/api/v2/updates");
+    const sse = new EventSource(`${API_URL}/updates`);
     sse.addEventListener("comment", commentListener);
     sse.addEventListener("upvote", upvoteListener);
   }, []);
 
   useEffect(() => {
     fetchComments();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [user, fetchComments]);
+
+  if (users.length === 0) return <div>Loading...</div>;
 
   return (
     <Context.Provider

@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = "/api/v2";
+const BASE_URL = "https://radiant-shelf-75743.herokuapp.com";
+export const API_URL = BASE_URL + "/api/v2";
 
 const buildHeaders = (userId: number) => {
   return { headers: { Authorization: `Bearer ${userId}` } };
