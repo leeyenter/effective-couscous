@@ -32,12 +32,14 @@ const CommentBtns = (props: { comment: CommentInterface }) => {
   if (props.comment.upvotes.map((x) => x.user).includes(ctx.user.id)) {
     btns.push(
       <button onClick={() => ctx.removeUpvote(props.comment.id)}>
-        Upvoted!
+        Upvoted! ({props.comment.upvotes.length})
       </button>
     );
   } else {
     btns.push(
-      <button onClick={() => ctx.addUpvote(props.comment.id)}>▲ Upvote</button>
+      <button onClick={() => ctx.addUpvote(props.comment.id)}>
+        ▲ Upvote ({props.comment.upvotes.length})
+      </button>
     );
   }
 
