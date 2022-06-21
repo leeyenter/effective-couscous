@@ -127,11 +127,79 @@ describe("Test upvotes", () => {
     expect(response.statusCode).toBe(401);
   });
 
-  test("Should fail on invalid comment ID", async () => {
+  test("Should fail PUT on invalid comment ID", async () => {
     const response = await request(router)
       .put("/api/v2/upvote/0")
       .set({ Authorization: "Bearer " + userId });
     expect(response.statusCode).toBe(500);
+  });
+
+  test("Working upvotes workflow", async () => {
+    const createResponse = await request(router)
+      .post("/api/v2/comments")
+      .send({ comment: "hello" })
+      .set({ Authorization: "Bearer " + userId });
+    expect(createResponse.statusCode).toBe(201);
+
+    const getResponse = await request(router)
+      .get("/api/v2/comments")
+      .set({ Authorization: "Bearer " + userId });
+    expect(getResponse.statusCode).toBe(200);
+
+    const response = await request(router)
+      .put("/api/v2/upvote/" + getResponse.body[0].id)
+      .set({ Authorization: "Bearer " + userId });
+    expect(response.statusCode).toBe(201);
+
+    const getResponse2 = await request(router)
+      .get("/api/v2/comments")
+      .set({ Authorization: "Bearer " + userId });
+    expect(getResponse2.statusCode).toBe(200);
+    expect(getResponse2.body[0].upvotes.length).toBeGreaterThan(
+      getResponse.body[0].upvotes.length
+    );
+
+    // Try adding again; list of upvotes should not change
+    const response2 = await request(router)
+      .put("/api/v2/upvote/" + getResponse.body[0].id)
+      .set({ Authorization: "Bearer " + userId });
+    expect(response2.statusCode).toBe(201);
+
+    const getResponse3 = await request(router)
+      .get("/api/v2/comments")
+      .set({ Authorization: "Bearer " + userId });
+    expect(getResponse3.statusCode).toBe(200);
+    expect(getResponse3.body[0].upvotes.length).toBe(
+      getResponse2.body[0].upvotes.length
+    );
+
+    // Try adding again; list of upvotes should not change
+    const response3 = await request(router)
+      .delete("/api/v2/upvote/" + getResponse.body[0].id)
+      .set({ Authorization: "Bearer " + userId });
+    expect(response3.statusCode).toBe(200);
+
+    const getResponse4 = await request(router)
+      .get("/api/v2/comments")
+      .set({ Authorization: "Bearer " + userId });
+    expect(getResponse4.statusCode).toBe(200);
+    expect(getResponse4.body[0].upvotes.length).toBeLessThan(
+      getResponse3.body[0].upvotes.length
+    );
+
+    // Try deleting again; list of upvotes should not change
+    const response4 = await request(router)
+      .delete("/api/v2/upvote/" + getResponse.body[0].id)
+      .set({ Authorization: "Bearer " + userId });
+    expect(response4.statusCode).toBe(200);
+
+    const getResponse5 = await request(router)
+      .get("/api/v2/comments")
+      .set({ Authorization: "Bearer " + userId });
+    expect(getResponse5.statusCode).toBe(200);
+    expect(getResponse5.body[0].upvotes.length).toBe(
+      getResponse4.body[0].upvotes.length
+    );
   });
 });
 
