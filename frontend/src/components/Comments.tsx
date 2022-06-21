@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { Context } from "../Context";
 import { Comment } from "./Comment";
 
@@ -7,9 +7,11 @@ export const Comments = () => {
 
   return (
     <div id="comments">
-      {ctx.comments.map((c) => (
-        <Comment comment={c} />
-      ))}
+      {ctx.comments
+        .filter((c) => c.parent_comment_id === null)
+        .map((c) => (
+          <Comment comment={c} key={c.id} />
+        ))}
     </div>
   );
 };

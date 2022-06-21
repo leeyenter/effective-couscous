@@ -17,10 +17,10 @@ export const API = {
     return resp.data;
   },
 
-  submitComment: async (userId: number, comment: string) => {
+  submitComment: async (userId: number, comment: string, parentId?: number) => {
     const resp = await axios.post(
       `${API_URL}/comments`,
-      { comment: comment },
+      { comment: comment, parent_comment_id: parentId },
       buildHeaders(userId)
     );
     return resp.data;

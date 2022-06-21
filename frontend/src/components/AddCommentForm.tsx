@@ -2,15 +2,18 @@ import React, { useContext, useState } from "react";
 import { API } from "../API";
 import { Context } from "../Context";
 
-export const AddCommentForm = () => {
+export const AddCommentForm = (props: {
+  parentId?: number;
+  callback?: () => void;
+}) => {
   const ctx = useContext(Context);
   const [comment, setComment] = useState("");
 
   const submitForm = (e: React.FormEvent) => {
     e.preventDefault();
-    API.submitComment(ctx.user.id, comment).then(() => {
+    API.submitComment(ctx.user.id, comment, props.parentId).then(() => {
       setComment("");
-      // ctx.fetchComments();
+      if (props.callback) props.callback();
     });
   };
 
@@ -23,6 +26,7 @@ export const AddCommentForm = () => {
         alt="User's profile"
       />
       <input
+        autoFocus
         type="text"
         placeholder="What are your thoughts?"
         value={comment}
