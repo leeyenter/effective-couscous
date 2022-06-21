@@ -10,6 +10,7 @@ import {
 } from "./Context";
 
 const App = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState<UserInterface[]>([]);
   const [comments, setComments] = useState<CommentInterface[]>([]);
   const [userId, setUserId] = useState(0);
@@ -28,8 +29,12 @@ const App = () => {
   }, [userId, users]);
 
   const fetchComments = useCallback(() => {
-    if (user.id > 0)
-      API.fetchComments(user.id).then((data) => setComments(data));
+    if (user.id > 0) {
+      API.fetchComments(user.id).then((data) => {
+        setComments(data);
+        setIsLoading(false);
+      });
+    }
   }, [user]);
 
   const addUpvote = (commentId: number) => {
@@ -48,7 +53,6 @@ const App = () => {
     setComments((oldComments) => {
       const newComments = oldComments.slice();
       newComments.unshift(json);
-      console.log(newComments);
       return newComments;
     });
   };
@@ -92,7 +96,7 @@ const App = () => {
     fetchComments();
   }, [user, fetchComments]);
 
-  if (users.length === 0) return <div>Loading...</div>;
+  if (isLoading) return <div id="loading">Loading...</div>;
 
   return (
     <Context.Provider

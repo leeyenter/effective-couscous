@@ -21,6 +21,17 @@ button {
   }
 }
 
+#loading {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #c9c9c9;
+  font-size: 13px;
+  font-family: "Inter", sans-serif;
+}
+
 #main-container {
   width: 100%;
   display: flex;
