@@ -13,6 +13,7 @@ export interface CommentInterface {
   created: Date;
   createdPretty: string;
   upvotes: any[];
+  parent_comment_id?: number;
 }
 
 export const defaultUser: UserInterface = { id: 0, name: "", pic: "" };

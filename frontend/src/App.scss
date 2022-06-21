@@ -15,10 +15,10 @@ html {
 button {
   cursor: pointer;
   transition: all 0.3s;
-}
 
-button:hover {
-  opacity: 0.85;
+  &:hover {
+    opacity: 0.85;
+  }
 }
 
 #main-container {
@@ -36,25 +36,25 @@ button:hover {
 #comment-box {
   display: flex;
   margin-top: 31px;
+
+  input {
+    flex: 1;
+    font-weight: 500;
+    padding: 8px 10px;
+    border: 1px #e5e5e5 solid;
+    border-radius: 4px;
+    transition: all 0.3s;
+
+    &:focus {
+      outline: none;
+      border: 1px solid #dbc5ff;
+    }
+  }
 }
 
 #profile-pic {
   margin-right: 12px;
   cursor: pointer;
-}
-
-#comment-box > input {
-  flex: 1;
-  font-weight: 500;
-  padding: 8px 10px;
-  border: 1px #e5e5e5 solid;
-  border-radius: 4px;
-  transition: all 0.3s;
-}
-
-#comment-box > input:focus {
-  outline: none;
-  border: 1px solid #dbc5ff;
 }
 
 h1 {
@@ -86,51 +86,72 @@ hr {
   align-items: flex-start;
   margin-bottom: 32px;
   font-size: 13px;
+
+  .comment-content {
+    margin-left: 11px;
+    width: 100%;
+
+    .comment-header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-top: 2px;
+      margin-bottom: 6px;
+
+      .comment-name {
+        font-weight: 600;
+        line-height: 1em;
+      }
+
+      .comment-date {
+        margin-left: 4px;
+        font-size: 11px;
+        color: #4b587c;
+        line-height: 1em;
+      }
+    }
+
+    .comment-text {
+      line-height: 1.5em;
+    }
+
+    .comment-btns {
+      margin-top: 8px;
+      width: 100%;
+
+      button {
+        background: none;
+        border: none;
+        outline: none;
+        color: #4b587c;
+        padding: 8px 0;
+        font-weight: 600;
+      }
+
+      button + button {
+        margin-left: 28px;
+      }
+    }
+  }
 }
 
-.comment-content {
-  margin-left: 11px;
+.comment-thread {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    width: 2px;
+    height: 100%;
+    top: 0;
+    left: 14px;
+    z-index: -1;
+    background-color: #eaeaea;
+    // border-left: 2px solid black;
+  }
 }
 
-.comment-header {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-top: 2px;
-  margin-bottom: 6px;
-}
-
-.comment-name {
-  font-weight: 600;
-  line-height: 1em;
-}
-
-.comment-date {
-  margin-left: 4px;
-  font-size: 11px;
-  color: #4b587c;
-  line-height: 1em;
-}
-
-.comment-btns {
-  margin-top: 8px;
-}
-
-.comment-btns > button {
-  background: none;
-  border: none;
-  outline: none;
-  color: #4b587c;
-  padding: 8px 0;
-  font-weight: 600;
-}
-
-.comment-text {
-  line-height: 1.5em;
-}
-
-.comment-btns > button + button {
-  margin-left: 28px;
+.comment-children {
+  margin-left: 24px;
 }
 
 img {
